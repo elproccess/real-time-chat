@@ -1,25 +1,49 @@
-import logo from './logo.svg';
+import React from "react";
 import './App.css';
 
+import socket from './global'
+
+import SideBar from './component/sideBar';
+import ChatView from "./component/chatView";
+
+
 function App() {
+  const [data, setData] = React.useState([]);
+  const [newData, setNewData] = React.useState([]);
+  
+  let array = [];
+  React.useEffect(() => {
+
+    socket.on('history', (messages) => setData(messages) );
+    console.log(data);
+    data.map(index => {
+      console.log(index.quotes);
+    });
+
+    window.addEventListener('unload', handleTabClosing)
+    getter();
+  }, []);
+
+  
+  const handleTabClosing = () => {
+    var huil = 0;
+    console.log("hbhjbj");
+    socket.emit('sendUserCount', huil);
+    socket.emit('terminate');
+    socket.close();
+  }
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="app-container">
+      <SideBar></SideBar>
+      <ChatView chat={data}></ChatView>
+      </div>
     </div>
   );
+
 }
 
 export default App;
+

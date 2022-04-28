@@ -1,0 +1,20 @@
+.sidebar {
+    width: 30%;
+    height: 100%;
+    background-color: #dcc1c1;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+    .sidebar-container{
+        align-items: flex-start;
+        justify-content:space-between;
+    }
+
+  .img-container {
+      flex: 1;
+      background-color: #f5e4fa;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center; 
+  }

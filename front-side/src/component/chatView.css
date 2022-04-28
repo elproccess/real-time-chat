@@ -1,0 +1,14 @@
+.chatview{
+    width: 70%;
+    height: 100%;
+    background-color: #ffffff;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .chat-screen{
+    width: 100%;
+    height: 80%;
+    overflow-y: scroll;
+    background-color: rgb(255, 217, 254);
+}
