@@ -1,17 +1,103 @@
 import React,{useState, useEffect}from 'react';
-
 import './sideBar.css';
+import img from '../img.png';
+import socket from '../global';
+
+import { motion, AnimatePresence } from "framer-motion";
 
 
-function SideBar(){
+function SideBar() {
+    const [isVisible, setVisible] = useState(true);
     const[userCount, setUserCount] = useState(0);
+    const[usersConntected, setUsersConntected] = useState([]);
+    const[usersDisConntected, setUsersDisConntected] = useState([]);
+    let initialState = null;
+    let array = [];
+
+    useEffect(() => {
+        socket.on("sendUserCount", (value) => {
+            setUserCount(value);
+            setVisible(!isVisible);
+        });
+        socket.on("sendUser", (user) => {
+            initialState = user;
+            console.log(user);
+            setUsersConntected(initialState);
+        });
+        usersConntected.map((user) => {
+               array.push(user + "has conneted");
+               
+            });
+            console.log(array);
+    });
+
+    useEffect(() => {
+        socket.on("disconnectedUser", (user) => {
+            initialState = user;
+            console.log(user);
+            setUsersDisConntected(initialState);
+            });
+            usersDisConntected.map((user) => {
+                array.push(user + "has Disconneted");
+                
+             });
+    }, );
 
 
-    return(
+    function timeout(number) {
+        return new Promise( res => setTimeout(res, number));
+    }
+    
+
+    return (
         <div className='sidebar'>
                 <div className="img-container">
-                    </div>
-            </div>
+                    <img src={img} alt='img' className='img'/>
+                    <p>big</p>
+                 </div>
+
+                 <div className='pressence-container'>{userCount === null ? 0 : userCount} Users Connected</div>
+                 <motion.div
+                    style={{
+                    width: 75,
+                    height: 75,
+                    borderRadius: 30,
+                    backgroundColor: "rgba(255,255,255,0.5)",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    cursor: "pointer"
+                    }}
+                    onTap={() => setVisible(!isVisible)}
+                >
+                <AnimatePresence>
+                    {isVisible && (
+                        <motion.div
+                            style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 15,
+                            backgroundColor: "#fff"
+                            }}
+                            initial={{ opacity: 0, scale: 0.75 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0 }}
+                        />
+                    )}
+                </AnimatePresence>
+                </motion.div>
+
+                <div className='notification-container'>
+                    <p>Notifcations</p>
+                    {usersConntected === null ? <div/> : 
+                    usersConntected.map((index) => (
+                        <p>{index}</p>
+                    ))
+                    } has Connected
+                </div>
+            
+        </div>
     );
 }
+
 export default SideBar;

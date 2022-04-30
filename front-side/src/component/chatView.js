@@ -4,6 +4,8 @@ import React,{useState, useEffect}from 'react';
 import socket from '../global';
 import './chatView.css';
 
+import MessageBubble from './MessageBubble'
+
 
 
 function ChatView({chat}){
@@ -45,8 +47,8 @@ function ChatView({chat}){
         <div className='chatview'>
             <div className='chat-screen'>
                 {data.map((val) => (
-                    <p>{val.quotes}</p>
-                ))}
+                    <MessageBubble key={val._id}  message={val.quotes} user={val.user} />
+                    ))}
                 
             </div>
 

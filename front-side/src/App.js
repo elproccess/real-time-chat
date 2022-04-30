@@ -21,7 +21,7 @@ function App() {
     });
 
     window.addEventListener('unload', handleTabClosing)
-    getter();
+    
   }, []);
 
   
