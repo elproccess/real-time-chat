@@ -10,7 +10,8 @@ function SideBar() {
     const [isVisible, setVisible] = useState(true);
     const[userCount, setUserCount] = useState(0);
     const[usersConntected, setUsersConntected] = useState([]);
-    const[usersDisConntected, setUsersDisConntected] = useState([]);
+    const[usersDisConntected, setUsersDisConntected] = useState("");
+    const[Conntected, setConntected] = useState("");
     let initialState = null;
     let array = [];
 
@@ -24,24 +25,33 @@ function SideBar() {
             console.log(user);
             setUsersConntected(initialState);
         });
-        usersConntected.map((user) => {
-               array.push(user + "has conneted");
-               
-            });
             console.log(array);
     });
 
     useEffect(() => {
+        connectUser();
+        
+    }, []);
+    
+
+    useEffect(() => {
+        disconnectedUser();
+        setUsersConntected((val) => [...val, usersDisConntected + " has disconneted"]);
+    },[usersDisConntected] );
+
+    function connectUser() {
+        socket.on("sendUser2", (user) => {
+            initialState = user;
+            setConntected(user);
+        });
+    }
+
+    function disconnectedUser(){
         socket.on("disconnectedUser", (user) => {
             initialState = user;
-            console.log(user);
-            setUsersDisConntected(initialState);
+            setUsersDisConntected(user);
             });
-            usersDisConntected.map((user) => {
-                array.push(user + "has Disconneted");
-                
-             });
-    }, );
+    }
 
 
     function timeout(number) {

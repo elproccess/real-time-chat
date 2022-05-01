@@ -44,6 +44,7 @@ io.on('connection', (socket) => {
 
      // broadcast the count & users connected.
     io.to('chat').emit("sendUser", arr);
+    io.to('chat').emit("sendUser2", socket.id);
     io.to('chat').emit("sendUserCount", io.engine.clientsCount);
 
 

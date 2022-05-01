@@ -29,7 +29,7 @@ function App() {
     var huil = 0;
     console.log("hbhjbj");
     socket.emit('sendUserCount', huil);
-    socket.emit('terminate');
+    socket.emit('disconnect');
     socket.close();
   }
 
