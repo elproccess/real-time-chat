@@ -14,12 +14,6 @@ function App() {
   let array = [];
   React.useEffect(() => {
 
-    socket.on('history', (messages) => setData(messages) );
-    console.log(data);
-    data.map(index => {
-      console.log(index.quotes);
-    });
-
     window.addEventListener('unload', handleTabClosing)
     
   }, []);

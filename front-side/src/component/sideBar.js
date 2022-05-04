@@ -20,34 +20,34 @@ function SideBar() {
             setUserCount(value);
             setVisible(!isVisible);
         });
-        socket.on("sendUser", (user) => {
-            initialState = user;
-            console.log(user);
-            setUsersConntected(initialState);
-        });
             console.log(array);
     });
 
     useEffect(() => {
         connectUser();
-        
     }, []);
-    
 
     useEffect(() => {
         disconnectedUser();
-        setUsersConntected((val) => [...val, usersDisConntected + " has disconneted"]);
-    },[usersDisConntected] );
+    }, []);
+    
+    
+
+  //  useEffect(() => {
+  //      disconnectedUser();
+  //      setUsersConntected((val) => [...val, usersDisConntected + " has disconneted"]);
+  //  },[usersDisConntected] );
 
     function connectUser() {
         socket.on("sendUser2", (user) => {
             initialState = user;
-            setConntected(user);
-        });
+            setUsersConntected((val) => [...val, initialState + " has conneted"]);
+        },[initialState]);
     }
 
     function disconnectedUser(){
         socket.on("disconnectedUser", (user) => {
+            setUsersConntected((val) => [...val, user + " has disconneted"]);
             initialState = user;
             setUsersDisConntected(user);
             });
@@ -103,7 +103,7 @@ function SideBar() {
                     usersConntected.map((index) => (
                         <p>{index}</p>
                     ))
-                    } has Connected
+                    }
                 </div>
             
         </div>

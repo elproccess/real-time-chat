@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
        console.log(clientId);
        arr.push(clientId);
    }
-   io.to('chat').emit('disconnectedUser', socket.io);
+   io.to('chat').emit('disconnectedUser', socket.id);
    io.to('chat').emit("sendUserCount", io.engine.clientsCount);
   });
 
