@@ -1,29 +1,29 @@
-const express = require('express')
-const bodyParser= require('body-parser')
-const app = express()
-const MongoClient = require('mongodb').MongoClient
+const express = require('express');
+const bodyParser= require('body-parser');
+const app = express();
+const MongoClient = require('mongodb').MongoClient;
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, { cors: { origin: '*' } });
 
-var count = 0;
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const connectionString = "mongodb+srv://test:test@cluster0.6fe8i.mongodb.net/star-wars-quotes?retryWrites=true&w=majority"
-var db
+var dbase;
+
 
 
 MongoClient.connect(connectionString, (err, client) => {
   if (err) return console.error(err)
-  db = client.db('star-wars-quotes')
+  dbase = client.db('star-wars-quotes')
 
   app.listen(process.env.PORT || 3001, () => {
     console.log(`Server is running on port ${3001}.`);
   });
  
-})
+});
 
 io.on('connection', (socket) => {
     console.log(socket.id);
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
     //array to place all users, for broadcasting.
     let arr = [];
 
-    //get all users connect to the chat room
+    //get all users connected to the chat room
     const clients = io.sockets.adapter.rooms.get('chat');
 
     
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
 
 
     // retreive all messages from the chat room history.
-    db.collection("quotes").find({}).toArray(function(err, result) {
+    dbase.collection("quotes").find({}).toArray(function(err, result) {
         if(err) return console.error(err);
           socket.emit("history", result);
         });
@@ -59,8 +59,8 @@ io.on('connection', (socket) => {
   socket.on("sendMessage", async (message) => {
   
     console.log(message);
-    await db.collection('quotes').insertOne({ "_id": message._id, "quotes": message, "user": socket.id}, function(err, result) {
-      db.collection('quotes').find({"_id": result.insertedId}).toArray(function(err, result) {
+    await dbase.collection('quotes').insertOne({ "_id": message._id, "quotes": message, "user": socket.id}, function(err, result) {
+      dbase.collection('quotes').find({"_id": result.insertedId}).toArray(function(err, result) {
         if(err){
           console.log(err);
         }

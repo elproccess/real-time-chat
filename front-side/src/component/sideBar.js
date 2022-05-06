@@ -10,18 +10,11 @@ function SideBar() {
     const [isVisible, setVisible] = useState(true);
     const[userCount, setUserCount] = useState(0);
     const[usersConntected, setUsersConntected] = useState([]);
-    const[usersDisConntected, setUsersDisConntected] = useState("");
-    const[Conntected, setConntected] = useState("");
     let initialState = null;
-    let array = [];
 
     useEffect(() => {
-        socket.on("sendUserCount", (value) => {
-            setUserCount(value);
-            setVisible(!isVisible);
-        });
-            console.log(array);
-    });
+        usersCount();
+    }, []);
 
     useEffect(() => {
         connectUser();
@@ -31,28 +24,33 @@ function SideBar() {
         disconnectedUser();
     }, []);
     
-    
-
-  //  useEffect(() => {
-  //      disconnectedUser();
-  //      setUsersConntected((val) => [...val, usersDisConntected + " has disconneted"]);
-  //  },[usersDisConntected] );
 
     function connectUser() {
         socket.on("sendUser2", (user) => {
             initialState = user;
             setUsersConntected((val) => [...val, initialState + " has conneted"]);
         },[initialState]);
+         setVisible(isVisible);
+         timeout(1000);
+         setVisible(!isVisible);
     }
 
     function disconnectedUser(){
         socket.on("disconnectedUser", (user) => {
             setUsersConntected((val) => [...val, user + " has disconneted"]);
             initialState = user;
-            setUsersDisConntected(user);
+        
             });
     }
 
+    function usersCount(){
+        socket.on("sendUserCount", (value) => {
+            setUserCount(value);
+            //setVisible(!isVisible);
+         });
+         console.log('i fire once');
+    }
+    
 
     function timeout(number) {
         return new Promise( res => setTimeout(res, number));
