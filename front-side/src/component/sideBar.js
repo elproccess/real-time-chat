@@ -1,4 +1,4 @@
-import React,{useState, useEffect}from 'react';
+import React,{useState, useEffect, useRef}from 'react';
 import './sideBar.css';
 import img from '../img.png';
 import socket from '../global';
@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 
 function SideBar() {
+    const messagesEndRef = useRef(null);
     const [isVisible, setVisible] = useState(true);
     const[userCount, setUserCount] = useState(0);
     const[usersConntected, setUsersConntected] = useState([]);
@@ -14,30 +15,37 @@ function SideBar() {
 
     useEffect(() => {
         usersCount();
+        scrollToBottom();
     }, []);
 
     useEffect(() => {
+        scrollToBottom();
         connectUser();
     }, []);
 
     useEffect(() => {
+        scrollToBottom();
         disconnectedUser();
+        
     }, []);
-    
 
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+      }
+    
     function connectUser() {
         socket.on("sendUser2", (user) => {
             initialState = user;
             setUsersConntected((val) => [...val, initialState + " has conneted"]);
         },[initialState]);
-         setVisible(isVisible);
+         setVisible(false);
          timeout(1000);
-         setVisible(!isVisible);
+         setVisible(true);
     }
 
     function disconnectedUser(){
         socket.on("disconnectedUser", (user) => {
-            setUsersConntected((val) => [...val, user + " has disconneted"]);
+            setUsersConntected((val) => [...val, user + " has DisConnected"]);
             initialState = user;
         
             });
@@ -51,6 +59,11 @@ function SideBar() {
          console.log('i fire once');
     }
     
+    const AlwaysScrollToBottom = () => {
+        const elementRef = useRef();
+        useEffect(() => elementRef.current.scrollIntoView({ behavior: "smooth" }));
+        return <div ref={elementRef} />;
+      };
 
     function timeout(number) {
         return new Promise( res => setTimeout(res, number));
@@ -65,22 +78,10 @@ function SideBar() {
                  </div>
 
                  <div className='pressence-container'>{userCount === null ? 0 : userCount} Users Connected</div>
-                 <motion.div
-                    style={{
-                    width: 75,
-                    height: 75,
-                    borderRadius: 30,
-                    backgroundColor: "rgba(255,255,255,0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    cursor: "pointer"
-                    }}
-                    onTap={() => setVisible(!isVisible)}
-                >
                 <AnimatePresence>
                     {isVisible && (
                         <motion.div
+                        onTap={() => setVisible(!isVisible)}
                             style={{
                             width: 40,
                             height: 40,
@@ -93,15 +94,28 @@ function SideBar() {
                         />
                     )}
                 </AnimatePresence>
-                </motion.div>
 
                 <div className='notification-container'>
                     <p>Notifcations</p>
                     {usersConntected === null ? <div/> : 
-                    usersConntected.map((index) => (
-                        <p>{index}</p>
+                    usersConntected.map((index) => (index.includes('DisConnected') ?
+                        <div
+                        style={{
+                        marginTop: "10px",
+                        backgroundColor: "#f28787",
+                        }}
+                        >{index}</div>
+                        :
+                        <div
+                        style={{
+                        marginTop: "10px",
+                        backgroundColor: "rgb(255, 217, 254)",
+                        }}
+                        >{index}</div>
+
                     ))
                     }
+                    <AlwaysScrollToBottom />
                 </div>
             
         </div>

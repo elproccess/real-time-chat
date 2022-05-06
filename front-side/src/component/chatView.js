@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import React,{useState, useEffect}from 'react';
+import React,{useState, useEffect, useRef}from 'react';
 
 import socket from '../global';
 import './chatView.css';
@@ -9,19 +9,21 @@ import MessageBubble from './MessageBubble'
 
 
 function ChatView({chat}){
+    const messagesEndRef = useRef(null); 
     const[data, setData] = useState([]);
     const[inputVal, setInputVal] = useState("");
     const[cmessage, setcMessage] = useState([]);
     const[usersConntected, setUsersConntected] = useState([]);
 
    useEffect(() => {
-
     socket.on('history', (messages) => setData(messages) );
    reciveingMessage();
+   scrollToBottom();
    }, []);
 
    useEffect(() => {
     setData((val) => [...val, cmessage]);
+    scrollToBottom();
    }, [cmessage]);
 
    function reciveingUser(){
@@ -30,6 +32,10 @@ function ChatView({chat}){
         setUsersConntected(user);
     });
    }
+
+   const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
    function reciveingMessage(){
     socket.on('message',  (message) => {
@@ -43,15 +49,20 @@ function ChatView({chat}){
     
   }
 
+  const AlwaysScrollToBottom = () => {
+    const elementRef = useRef();
+    useEffect(() => elementRef.current.scrollIntoView({ behavior: "smooth" }));
+    return <div ref={elementRef} />;
+  };
+
     return(
         <div className='chatview'>
             <div className='chat-screen'>
                 {data.map((val) => (
-                    <MessageBubble key={val._id}  message={val.quotes} user={val.user} />
+                    <MessageBubble  key={val._id}  message={val.quotes} user={val.user} />
                     ))}
-                
+                    <AlwaysScrollToBottom/>
             </div>
-
         <form >
             <div className='form-container'>
                 <div className="input-container">
