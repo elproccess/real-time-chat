@@ -103,6 +103,7 @@ function SideBar() {
                         style={{
                         marginTop: "10px",
                         backgroundColor: "#f28787",
+                        color:"#fff"
                         }}
                         >{index}</div>
                         :
@@ -110,6 +111,7 @@ function SideBar() {
                         style={{
                         marginTop: "10px",
                         backgroundColor: "rgb(255, 217, 254)",
+                        color:"#0eac28"
                         }}
                         >{index}</div>
 
