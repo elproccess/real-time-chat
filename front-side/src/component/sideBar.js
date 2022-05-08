@@ -101,6 +101,7 @@ function SideBar() {
                     usersConntected.map((index) => (index.includes('DisConnected') ?
                         <div
                         style={{
+                        borderRadius: '5px',
                         marginTop: "10px",
                         backgroundColor: "#f28787",
                         color:"#fff"
@@ -109,9 +110,11 @@ function SideBar() {
                         :
                         <div
                         style={{
+                        borderRadius: '5px',
                         marginTop: "10px",
-                        backgroundColor: "rgb(255, 217, 254)",
-                        color:"#0eac28"
+                        backgroundColor: "#fff",
+                        boxShadow:	"0 0.125rem 0.5rem rgba(0, 0, 0, .05), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2)",
+                        color:"#0eac28",
                         }}
                         >{index}</div>
 
