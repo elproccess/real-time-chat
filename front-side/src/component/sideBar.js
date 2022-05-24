@@ -56,6 +56,7 @@ function SideBar() {
             setUserCount(value);
             //setVisible(!isVisible);
          });
+         console.log('i fire once');
     }
     
     const AlwaysScrollToBottom = () => {

@@ -8,14 +8,9 @@ import ChatView from "./component/chatView";
 
 
 function App() {
-  const [data, setData] = React.useState([]);
-  const [newData, setNewData] = React.useState([]);
-  
-  let array = [];
-  React.useEffect(() => {
 
+  React.useEffect(() => {
     window.addEventListener('unload', handleTabClosing)
-    
   }, []);
 
   
@@ -32,7 +27,7 @@ function App() {
     <div className="App">
       <div className="app-container">
       <SideBar></SideBar>
-      <ChatView chat={data}></ChatView>
+      <ChatView></ChatView>
       </div>
     </div>
   );

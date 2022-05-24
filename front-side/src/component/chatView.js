@@ -1,4 +1,3 @@
-import { render } from '@testing-library/react';
 import React,{useState, useEffect, useRef}from 'react';
 
 import socket from '../global';
@@ -8,12 +7,11 @@ import MessageBubble from './MessageBubble'
 
 
 
-function ChatView({chat}){
+function ChatView(){
     const messagesEndRef = useRef(null); 
     const[data, setData] = useState([]);
     const[inputVal, setInputVal] = useState("");
     const[cmessage, setcMessage] = useState([]);
-    const[usersConntected, setUsersConntected] = useState([]);
 
    useEffect(() => {
     socket.on('history', (messages) => setData(messages) );
@@ -25,13 +23,6 @@ function ChatView({chat}){
     setData((val) => [...val, cmessage]);
     scrollToBottom();
    }, [cmessage]);
-
-   function reciveingUser(){
-    socket.on("sendUser", (user) => {
-        console.log(user);
-        setUsersConntected(user);
-    });
-   }
 
    const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
